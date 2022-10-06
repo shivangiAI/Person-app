@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useProjectStyles } from "../styles/index.ts";
+import { useProjectStyles } from "../styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import Snackbar from "@mui/material/Snackbar";
@@ -8,10 +8,11 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
-import axios from "axios";
+import { fetchRequest } from "../../../Utils/fetchAPI";
+import { DataTestIds } from "../../../Constants/DataTestIds";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -25,9 +26,9 @@ function CreateProject(props: any) {
     const [projectName, setProjectName] = useState("");
     const [showToaster, setShowToaster] = useState(true);
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [personName, setPersonName] = useState([]);
+    const [personName, setPersonName] = useState<any>([]);
     const { personList } = props;
-    const [personIds, setPersonIds] = useState([]);
+    const [personIds, setPersonIds] = useState<any>([]);
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -40,26 +41,28 @@ function CreateProject(props: any) {
         },
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e: any) => {
         e.preventDefault();
         const data = {
             projectName,
             personIds
         };
-        axios
-        .post("https://localhost:7124/api/Project", data, {
-            headers: {
-            "Content-Type": "application/json",
-            },
-        })
-        .then((res) => {
-            if (res.status === 200) {
+        try {
+            const res = await fetchRequest(
+                "https://localhost:7124/api/Project",
+                "POST",
+                data,
+            );
+    
+            if (res) {
                 setProjectName("");
                 setShowToaster(true);
                 setOpenSnackbar(true);
                 setPersonName([]);
             }
-        });
+        } catch(error) {
+            throw new Error();
+        }
     };
 
     const handleClose = (
@@ -67,13 +70,13 @@ function CreateProject(props: any) {
         reason?: string
     ) => {
         if (reason === "clickaway") {
-        return;
+            return;
         }
 
         setOpenSnackbar(false);
     };
 
-    const handleMenuChange = (event, selectedValue) => {
+    const handleMenuChange = (event: SelectChangeEvent<typeof personName>, selectedValue: any) => {
         let ids = personIds;
         const selectedId = selectedValue.props.id
 
@@ -98,32 +101,33 @@ function CreateProject(props: any) {
     };
 
     return (
-        <div className={classes.createPersonContainer}>
-        <div className={classes.personHeader}>Create Project</div>
-        <div className={classes.txtFieldContainer}>
-            <TextField
-                label="Project Name"
-                required
-                value={projectName}
-                variant="outlined"
-                onChange={(e) => setProjectName(e.target.value)}
-            />
-        </div>
-        <div className={classes.projectMenu}>
-            <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Persons</InputLabel>
-            <Select
-                labelId="demo-multiple-name-label"
-                id="demo-multiple-name"
-                multiple
-                value={personName}
-                onChange={handleMenuChange}
-                
-                input={<OutlinedInput label="Name" />}
-                renderValue={(selected) => selected.join(', ')}
-                MenuProps={MenuProps}
-            >
-                {personList.map((project) => (
+        <div data-testid={DataTestIds.CREATE_PROJECT_WRAPPER}>
+            <div className={classes.createPersonContainer}>
+            <div className={classes.personHeader}>Create Project</div>
+            <div className={classes.txtFieldContainer}>
+                <TextField
+                    label="Project Name"
+                    required
+                    value={projectName}
+                    variant="outlined"
+                    onChange={(e) => setProjectName(e.target.value)}
+                />
+            </div>
+            <div className={classes.projectMenu}>
+                <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="demo-multiple-checkbox-label">Persons</InputLabel>
+                <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    multiple
+                    value={personName}
+                    onChange={handleMenuChange}
+                    
+                    input={<OutlinedInput label="Name" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                >
+                    {personList.map((project: any) => (
                         <MenuItem
                             id={project.personId}
                             key={project.personId}
@@ -133,32 +137,33 @@ function CreateProject(props: any) {
                             <ListItemText primary={project.personName} />
                         </MenuItem>
                     ))
-                }
-            </Select>
-            </FormControl>
-        </div>
+                    }
+                </Select>
+                </FormControl>
+            </div>
 
-        <div className={classes.submitBtn} onClick={handleSubmit}>
-            <Button type="submit" variant="contained" color="primary">
-                Create
-            </Button>
-        </div>
-        {showToaster && (
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            >
-            <Alert
-                onClose={handleClose}
-                severity="success"
-                sx={{ width: "100%" }}
-            >
-                Project is created successfully!
-            </Alert>
-            </Snackbar>
-        )}
+            <div onClick={handleSubmit}>
+                <Button type="submit" variant="contained" color="primary">
+                    Create
+                </Button>
+            </div>
+            {showToaster && (
+                <Snackbar
+                    open={openSnackbar}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                >
+                <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    Project is created successfully!
+                </Alert>
+                </Snackbar>
+            )}
+            </div>
         </div>
     );
 }

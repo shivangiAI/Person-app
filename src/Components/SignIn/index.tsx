@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useSignInStyles } from "./styles/index.ts";
+import { useSignInStyles } from "./styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { fetchRequest } from "../../Utils/fetchAPI.ts";
+import { fetchRequest } from "../../Utils/fetchAPI";
+import { DataTestIds } from "../../Constants/DataTestIds";
 
 function SignInPage() {
     const classes = useSignInStyles();
@@ -13,7 +14,7 @@ function SignInPage() {
     const [error, setError] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async(e: any) => {
         e.preventDefault();
         const data = {
             username: userName,
@@ -38,7 +39,6 @@ function SignInPage() {
                 "https://localhost:7124/api/Authenticate/login",
                 "POST",
                 data,
-                undefined
             );
             if (res) {
                 navigate("/home");
@@ -50,31 +50,33 @@ function SignInPage() {
 
     return (
         <div>
-        <label className={classes.label}>Sign In</label>
-        <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField
-                label="User Name"
-                required
-                value={userName}
-                variant="outlined"
-                onChange={(e) => setUserName(e.target.value)}
-            />
-            <TextField
-                label="Password"
-                required
-                value={password}
-                variant="outlined"
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-            />
+            <label className={classes.label}>Sign In Page</label>
+            <form className={classes.root} onSubmit={handleSubmit}>
+                <TextField
+                    label="User Name"
+                    required
+                    value={userName}
+                    variant="outlined"
+                    onChange={(e) => setUserName(e.target.value)}
+                    data-testid={DataTestIds.USER_NAME}
+                />
+                <TextField
+                    label="Password"
+                    required
+                    value={password}
+                    variant="outlined"
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    data-testid={DataTestIds.PASSWORD}
+                />
 
-            <div className={classes.submitBtn}>
-            <Button type="submit" variant="contained" color="primary">
-                Sign In
-            </Button>
-            </div>
-        </form>
-        {error && <div>Getting some error in Sign In, Please try again.</div>}
+                <div className={classes.submitBtn}>
+                    <Button type="submit" variant="contained" color="primary" data-testid={DataTestIds.SIGN_IN_BUTTON}>
+                        Sign In
+                    </Button>
+                </div>
+            </form>
+            {error && <div>Getting some error in Sign In, Please try again.</div>}
         </div>
     );
 }

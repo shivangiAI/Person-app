@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 
-export function fetchRequest(url, method, body, headers) {
+export function fetchRequest(url: string, method: string, body: any, headers?: AxiosRequestHeaders) {
     const reqHeaders = headers ? headers : {"Content-Type": "application/json" };
     switch(method) {
         case 'GET': {

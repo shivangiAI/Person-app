@@ -1,7 +1,7 @@
-import React from 'react'
 import { Button } from "@material-ui/core";
 import { useNavigate } from 'react-router-dom';
-import { useHomeStyles } from './styles/index.ts';
+import { DataTestIds } from "../../Constants/DataTestIds";
+import { useHomeStyles } from './styles';
 
 function Home() {
     const classes = useHomeStyles();
@@ -18,12 +18,24 @@ function Home() {
     return (
         <div className={classes.homeListContainer}>
             <div className={classes.boxContainer}>
-                <Button type="submit" variant="contained" color="primary" onClick={handlePerson}>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handlePerson}
+                    data-testid={DataTestIds.PERSON_BUTTON}
+                >
                     Person
                 </Button>
             </div>
             <div className={classes.boxContainer}>
-                <Button type="submit" variant="contained" color="primary" onClick={handleProject}>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleProject}
+                    data-testid={DataTestIds.PROJECT_BUTTON}
+                >
                     Project
                 </Button>
             </div>

@@ -85,7 +85,7 @@ function SignUpPage() {
             </div>
 
             <div className={classes.signInText}>
-                <Link href="#" onClick={() => navigate('/signIn')}>Already have an account? Sign in</Link>
+                <Link href="#"  data-testid={DataTestIds.SIGN_IN_LINK} onClick={() => navigate('/signIn')}>Already have an account? Sign in</Link>
             </div>
             {error && <div>Getting some error in Sign Up, Please try again.</div>}
         </form>

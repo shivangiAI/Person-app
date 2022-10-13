@@ -4,6 +4,7 @@ export class DataTestIds {
     static EMAIL = "EMAIL";
     static SIGN_IN_BUTTON = "SIGN_IN_BUTTON";
     static SIGN_UP_BUTTON = "SIGN_UP_BUTTON";
+    static SIGN_IN_LINK = "SIGN_IN_LINK";
 
     static PERSON_BUTTON = "PERSON_BUTTON";
     static PROJECT_BUTTON = "PROJECT_BUTTON";

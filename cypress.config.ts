@@ -12,7 +12,7 @@ export default defineConfig({
       on('file:preprocessor', cucumber(options))
       // implement node event listeners here
     },
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://localhost:7124",
     specPattern: "**/*.feature"
   },
 });

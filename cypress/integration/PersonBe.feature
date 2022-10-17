@@ -5,7 +5,6 @@ Scenario: User tries to create person
     Given User set POST person API endpoint
     When User sends a POST HTTP request to add the person
     Then User get successful response for "@addPersonData"
-    And Received person should get the status code 200
 
 Scenario: User requests to get all persons
     Given User set GET person API endpoint
@@ -20,3 +19,7 @@ Scenario: User requests to get person by Id
     Then User get successful response for "@personResponse"
     And User receives an object of person
 
+Scenario: User tries to delete person
+    Given User set DELETE person API endpoint
+    When User sends a DELETE HTTP request to delete the person
+    Then User get successful response for "@personDelete"

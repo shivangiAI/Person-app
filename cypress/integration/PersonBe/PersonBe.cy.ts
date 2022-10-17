@@ -1,6 +1,6 @@
 import { Given, Then, When } from "cypress-cucumber-preprocessor/steps";
 
-let personId: Number;
+let personId: number;
 
 Given("User set POST person API endpoint", () => {
     cy.wrap('/api/Person').as('person');
@@ -23,10 +23,10 @@ Given("User set GET person API endpoint", () => {
 When('User sends a GET HTTP request to get the persons', () => {
     cy.request("GET", "/persons").as('allPersonResponse');
     cy.get('@allPersonResponse').then((persons: any) => {
-        console.log('persons: ', persons);
+        
         const length = persons.body.length - 1;
         personId = persons.body[length].personId;
-        console.log('personId: ', personId);
+        
     })
 });
 
@@ -47,11 +47,21 @@ Given("User set GET person API endpoint", () => {
 });
 
 When("User sends a GET HTTP request to get the person", () => {
-    cy.request("GET", '/persons/personId?personId=5').as('personResponse');
+    cy.request("GET", `/persons/personId?personId=${personId}`).as('personResponse');
 });
 
 Then("User receives an object of person", () => {
     expect(cy.get('@personResponse').its('body'));
+});
+
+Given("User set PUT person API endpoint", () => {
+    cy.wrap('/api/Person').as('person');
+});
+
+When("User sends a PUT HTTP request to update the person", () => {
+    cy.fixture('updatePerson').then((person) => {
+        cy.request("PUT", "api/Person", person).as('personUpdate');
+    });
 });
 
 Given("User set DELETE person API endpoint", () => {

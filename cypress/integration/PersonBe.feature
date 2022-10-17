@@ -19,6 +19,11 @@ Scenario: User requests to get person by Id
     Then User get successful response for "@personResponse"
     And User receives an object of person
 
+Scenario: User tries to update person
+    Given User set PUT person API endpoint
+    When User sends a PUT HTTP request to update the person
+    Then User get successful response for "@personUpdate"
+
 Scenario: User tries to delete person
     Given User set DELETE person API endpoint
     When User sends a DELETE HTTP request to delete the person

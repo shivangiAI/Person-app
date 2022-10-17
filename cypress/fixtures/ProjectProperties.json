@@ -1,0 +1,12 @@
+{
+    "projectId": 1,
+    "projectName": "Test",
+    "persons": [
+        {
+            "personId": 2,
+            "personName": "Janki",
+            "personCountry": "Usa",
+            "projectDTOs": null
+        }
+    ]
+}
